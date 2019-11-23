@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -10,31 +12,63 @@ import (
 
 // main function
 func main() {
-
-	feedDBwVideo()
 	router := mux.NewRouter()
-	router.HandleFunc("/gerentes", GetG).Methods("GET")
-	/**
-	router.HandleFunc("/contato/{id}", GetPerson).Methods("GET")
-	router.HandleFunc("/contato/{id}", CreatePerson).Methods("POST")
-	router.HandleFunc("/contato/{id}", DeletePerson).Methods("DELETE")
-	*/
+	router.HandleFunc("/gerentes", createGerente).Methods("POST")
+	router.HandleFunc("/gerentes", getGerentes).Methods("GET")
+	router.HandleFunc("/gerentes/{id}", getGerente).Methods("GET")
+	router.HandleFunc("/gerentes/{id}", deleteGerente).Methods("DELETE")
+
 	log.Fatal(http.ListenAndServe(":8000", router))
-
 }
 
-// "GetVideo to get all videos from DB"
-func GetVideo(w http.ResponseWriter, r *http.Request) {
+func deleteGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	v := getVideoFromDB()
-	json.NewEncoder(w).Encode(v)
 
+	vars := mux.Vars(r)
+	gerente, err := deleteGerenteFromDB(vars["id"])
+	if err == nil {
+		json.NewEncoder(w).Encode(gerente)
+		return
+	}
+	http.Error(w, err.Error(), 500)
 }
 
-func PostGerente(w http.ResponseWriter, r *http.Request) {
+func getGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	vars := mux.Vars(r)
+	gerente, err := getGerenteFromDB(vars["id"])
+	if err == nil {
+		json.NewEncoder(w).Encode(gerente)
+		return
+	}
+	http.Error(w, err.Error(), 500)
+}
+
+func getGerentes(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	gerentesSlice := getGerentesFromDB()
+	json.NewEncoder(w).Encode(gerentesSlice)
+}
+
+func createGerente(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	var gerente gerente
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(r.Body)
+	newByt := buf.Bytes()
+	err := json.Unmarshal(newByt, &gerente)
+	if err != nil {
+		fmt.Printf("There was an error decoding the json. err = %s", err)
+		return
+	}
+	insertGerente(gerente)
 }
