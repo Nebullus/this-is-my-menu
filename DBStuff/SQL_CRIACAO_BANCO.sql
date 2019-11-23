@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`restaurante` (
   `horario_atendimento` VARCHAR(45) NOT NULL,
   `gerente_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_restaurante_gerente_idx` (`gerente_id` ASC) VISIBLE,
+  INDEX `fk_restaurante_gerente_idx` (`gerente_id` ASC),
   CONSTRAINT `fk_restaurante_gerente`
     FOREIGN KEY (`gerente_id`)
     REFERENCES `mydb`.`gerente` (`id`)
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`cardapio` (
   `logo` BLOB NOT NULL,
   `restaurante_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_cardapio_restaurante1_idx` (`restaurante_id` ASC) VISIBLE,
+  INDEX `fk_cardapio_restaurante1_idx` (`restaurante_id` ASC) ,
   CONSTRAINT `fk_cardapio_restaurante1`
     FOREIGN KEY (`restaurante_id`)
     REFERENCES `mydb`.`restaurante` (`id`)
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`item` (
   `preco` DOUBLE NOT NULL,
   `cardapio_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_item_cardapio1_idx` (`cardapio_id` ASC) VISIBLE,
+  INDEX `fk_item_cardapio1_idx` (`cardapio_id` ASC) ,
   CONSTRAINT `fk_item_cardapio1`
     FOREIGN KEY (`cardapio_id`)
     REFERENCES `mydb`.`cardapio` (`id`)
