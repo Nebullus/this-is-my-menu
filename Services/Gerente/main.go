@@ -7,21 +7,26 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
 func main() {
 	router := mux.NewRouter()
+	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"})
+	origins := handlers.AllowedOrigins([]string{"*"})
 	router.HandleFunc("/gerentes", createGerente).Methods("POST")
 	router.HandleFunc("/gerentes", getGerentes).Methods("GET")
 	router.HandleFunc("/gerentes/{id}", getGerente).Methods("GET")
 	router.HandleFunc("/gerentes/{id}", deleteGerente).Methods("DELETE")
 
-	log.Fatal(http.ListenAndServe(":8000", router))
+	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(headers, methods, origins)(router)))
 }
 
 func deleteGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
+	w.Header().Set("Content-Type", "text/html; charset=ascii")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
@@ -37,6 +42,7 @@ func deleteGerente(w http.ResponseWriter, r *http.Request) {
 
 func getGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
+	w.Header().Set("Content-Type", "text/html; charset=ascii")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
@@ -52,6 +58,7 @@ func getGerente(w http.ResponseWriter, r *http.Request) {
 
 func getGerentes(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
+	w.Header().Set("Content-Type", "text/html; charset=ascii")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
@@ -62,6 +69,7 @@ func getGerentes(w http.ResponseWriter, r *http.Request) {
 
 func createGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
+	w.Header().Set("Content-Type", "text/html; charset=ascii")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
