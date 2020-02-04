@@ -10,7 +10,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// main function
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/gerentes", createGerente).Methods("POST")
@@ -24,7 +23,8 @@ func main() {
 func deleteGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
 	vars := mux.Vars(r)
 	gerente, err := deleteGerenteFromDB(vars["id"])
@@ -38,7 +38,9 @@ func deleteGerente(w http.ResponseWriter, r *http.Request) {
 func getGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
 	vars := mux.Vars(r)
 	gerente, err := getGerenteFromDB(vars["id"])
 	if err == nil {
@@ -51,7 +53,9 @@ func getGerente(w http.ResponseWriter, r *http.Request) {
 func getGerentes(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
 	gerentesSlice := getGerentesFromDB()
 	json.NewEncoder(w).Encode(gerentesSlice)
 }
@@ -59,7 +63,8 @@ func getGerentes(w http.ResponseWriter, r *http.Request) {
 func createGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
 	var gerente gerente
 	buf := new(bytes.Buffer)
