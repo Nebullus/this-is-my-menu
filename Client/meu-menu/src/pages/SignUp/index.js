@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,6 +10,8 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import axios from 'axios';
 
 function Copyright() {
   return (
@@ -52,6 +54,30 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp() {
   const classes = useStyles();
 
+  const [nome, setNome] = useState()
+	const [email, setEmail] = useState()
+  const [senha, setSenha] = useState()
+
+  function _handleSubmit(e) {
+    e.preventDefault()
+  
+    let gerente = {
+      nome,
+      email,
+      senha,
+    }
+  
+  axios.post(`gerentes/`, gerente)
+    .then((r) => {
+      console.log(r)
+      alert('Cadastro efetuado com sucesso!')
+    })
+    .catch((e) => {
+      console.log(e.response)
+      alert('Desculpe, não conseguimos efetuar o seu cadastro. Tente novamente mais tarde...')
+    })
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -61,7 +87,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Cadastre-se
         </Typography>
-        <form className={classes.form} noValidate>
+        <form onSubmit={_handleSubmit} className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -73,6 +99,7 @@ export default function SignUp() {
                 id="firstName"
                 label="Nome completo"
                 autoFocus
+                onChange={(e) => setNome(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -84,6 +111,7 @@ export default function SignUp() {
                 label="E-mail"
                 name="email"
                 autoComplete="email"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -96,6 +124,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={(e) => setSenha(e.target.value)}
               />
             </Grid>
           </Grid>
