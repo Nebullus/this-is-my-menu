@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
+import {Redirect} from 'react-router-dom';
+
 import api from '../../services/api'
 
 function Copyright() {
@@ -71,10 +73,12 @@ export default function SignUp() {
     .then((r) => {
       console.log(r)
       alert('Cadastro efetuado com sucesso!')
+      window.location = "/"
     })
     .catch((e) => {
       console.log(e.response)
       alert('Desculpe, não conseguimos efetuar o seu cadastro. Tente novamente mais tarde...')
+      window.location = "/signup"
     })
   }
 
