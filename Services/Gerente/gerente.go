@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"log"
 )
 
@@ -93,7 +94,7 @@ func getGerentesFromDB() (gerentesSlice []gerente) {
 
 func insertGerente(gerente gerente) (result bool) {
 	var con *sql.DB = createCon()
-
+	fmt.Print(gerente)
 	newPass := encrypting(gerente.Senha)
 	gerente.Senha = newPass
 

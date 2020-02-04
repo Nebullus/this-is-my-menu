@@ -9,7 +9,7 @@ import (
 )
 
 func createCon() *sql.DB {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/menu_db")
+	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/mydb")
 	if err != nil {
 		fmt.Println("MySQL db is not connected")
 		fmt.Println(err.Error())
