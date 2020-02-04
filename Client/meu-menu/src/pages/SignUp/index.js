@@ -67,7 +67,7 @@ export default function SignUp() {
       senha,
     }
   
-  api.post(`gerentes/`, gerente)
+  api.post(`gerentes`, gerente)
     .then((r) => {
       console.log(r)
       alert('Cadastro efetuado com sucesso!')
