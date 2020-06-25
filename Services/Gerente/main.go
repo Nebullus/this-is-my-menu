@@ -9,6 +9,13 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
+)
+
+var (
+	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
+	key   = []byte("super-secret-key")
+	store = sessions.NewCookieStore(key)
 )
 
 func main() {
@@ -26,10 +33,7 @@ func main() {
 
 func deleteGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
-	w.Header().Set("Content-Type", "text/html; charset=ascii")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	setCORSRules(w)
 
 	vars := mux.Vars(r)
 	gerente, err := deleteGerenteFromDB(vars["id"])
@@ -42,10 +46,7 @@ func deleteGerente(w http.ResponseWriter, r *http.Request) {
 
 func getGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
-	w.Header().Set("Content-Type", "text/html; charset=ascii")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	setCORSRules(w)
 
 	vars := mux.Vars(r)
 	gerente, err := getGerenteFromDB(vars["id"])
@@ -58,10 +59,7 @@ func getGerente(w http.ResponseWriter, r *http.Request) {
 
 func getGerentes(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
-	w.Header().Set("Content-Type", "text/html; charset=ascii")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	setCORSRules(w)
 
 	gerentesSlice := getGerentesFromDB()
 	json.NewEncoder(w).Encode(gerentesSlice)
@@ -69,11 +67,7 @@ func getGerentes(w http.ResponseWriter, r *http.Request) {
 
 func createGerente(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
-	w.Header().Set("Content-Type", "text/html; charset=ascii")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-
+	setCORSRules(w)
 	var gerente gerente
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(r.Body)
@@ -84,4 +78,12 @@ func createGerente(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	insertGerente(gerente)
+}
+
+func setCORSRules(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "text/html; charset=ascii")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
 }
